@@ -1,0 +1,389 @@
+%        File: install.tex
+%     Created: ven. déc. 25 04:00  2015 C
+% Last Change: ven. déc. 25 04:00  2015 C
+%
+\documentclass[a4paper]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\begin{document}
+%\frontmatter
+%Je remercie le site \url{archlinux.org} qui m'a bien aid\'e
+\title{Installation de Archlinux}
+\author{FORGETTE Benoît}
+\maketitle
+
+%\mainmatter
+
+\tableofcontents
+\part{Prerequis et lancement d'Archlinux live}
+\section{Telecharger Archlinux live}
+Pour cette première partie rien de bien complique il vous suffit juste de
+vous rendre sur \url{https://www.archlinux.org/download/} et de telecharger
+soit en torrent\footnote{BitTorrent est un protocole de transfert de données 
+pair à pair (P2P) à travers un réseau informatique.}
+soit en direct download.
+\section{Graver l'ISO sur un support}
+Maintenant que vous êtes en possession de votre iso il est temps de le
+graver, de nombreux outils peux faire ca pour vous comme\@:
+\begin{itemize} 
+  \item \href{http://www.linuxliveusb.com/fr/download}{Lili}
+  \item \href{https://unetbootin.github.io/}{unetbootin}
+  \item etc.
+\end{itemize}
+enfin si vous avez un Linux sous la main vous pouvez graver votre cle ou
+votre cd en ligne de commande très simplement avec cette commande\@:
+\begin{verbatim}
+dd if= *.iso of=usb bs=520
+\end{verbatim}
+\section{Demarrage de votre Archlinux live}
+Maintenant il ne vous reste plus qu'a redmarrer votre machine puis appuyer
+sur \'echap le plus rapidement possible.Vous voila alors dans votre
+BIOS\footnote{Le Basic Input Output System (BIOS, en français:
+  ``système élémentaire d'entrée/sortie '') est, au sens strict, un ensemble de
+  fonctions, contenu dans la mémoire morte (ROM) de la carte mère d'un
+  ordinateur, lui permettant d'effectuer des opérations élémentaires lors de sa
+mise sous tension, par exemple la lecture d'un secteur sur un disque.}
+Ici vous aller pouvoir changer l'ordre des boot ainsi mettez votre cl\'e ou
+cd en premier.\\
+Red\'emarrer votre machine et le tour est jouer la machine boot sur la cl\'e ou
+le cd.
+Ici appuyer sur enter et votre Archlinux live va d\'emarrer.\\
+\part{Archlinux en console}
+\chapter{partitionnement  du disque dur}
+Premier souci à survenir votre clavier est en QWERTY si vous voulez changer
+cela taper seulement la commande suivante qui va vous permettre de charger le
+clavier AZERTY:
+\begin{verbatim}
+loadkeys fr
+\end{verbatim}
+Maintenant pour partitionner votre disque dur taper la commande:
+\begin{verbatim}
+cfdisk ref
+\end{verbatim}
+\begin{figure}[h]
+  \includegraphics[width=13cm]{images/cfdisk}
+\end{figure}
+Nous posons ref comme tant le position du disque sur la machine exemple
+``/dev/sda''.\\
+Les zones que je vous conseille d'allouer sont les suivante:\\ \\
+\begin{tabular}{|c|c|c|c|}
+  Reference & Point de montage & Taille & Système de fichier\\
+  \hline
+  1 & /boot & 512 Mo & ext2 \\
+  \hline
+  2 & & Taille de la mémoire vive & swap \\
+  \hline
+  3 & / & 20 Go & ext4\\
+  \hline
+  4 & /home & 40Go & ext4
+\end{tabular}
+\\Maintenant que les 4 partitions ont été crée mettez la partition boot comme
+bootable puis enregistrez et quittez.\\
+
+Pour formater les partitions, il suffit d'entrer les commandes suivantes:
+\begin{verbatim}
+mkfs.ext2 /dev/ref1
+mkfs.ext4 /dev/ref3
+mkfs.ext4 /dev/ref4
+mkswap /dev/ref2
+swapon /dev/ref2
+\end{verbatim}
+Puis il ne reste plus qu'a monter les 4 partitions ainsi que crée le dossier
+home et et boot.
+\begin{verbatim}
+mount /dev/ref3 /mnt
+mkdir /mnt/{boot,home}
+mount /dev/ref1 /mnt/boot
+mount /dev/ref4 /mnt/home
+\end{verbatim}
+Il n'est pas nécessaire de crée la partition swap et / et /home peuvent
+cohabiter bien qu'il est conseiller de les garder.Elle vous permettra en outre
+de posseder plusieurs linux avec le meme home d'ailleurs si vous posseder
+plusieurs linux il n'est pas necessaire de créer la partition boot.\\
+Revenons au cas ou vous voulez moins partitionner vous obtiendriez alors\@:\\ \\
+\begin{tabular}{|c|c|c|c|}
+  Reference & Point de montage & Taille & Système de fichier\\
+  \hline
+  1 & /boot & 512 Mo & ext2 \\
+  \hline
+  2 & / et /home & 60 Go & ext4\\
+\end{tabular}
+Pour formater les partitions, il suffit d'entrer les commandes suivantes:
+\begin{verbatim}
+mkfs.ext2 /dev/ref1
+mkfs.ext4 /dev/ref2
+\end{verbatim}
+Puis il ne reste plus qu'a monter les 4 partitions ainsi que crée le dossier
+home et et boot.
+\begin{verbatim}
+mount /dev/ref2 /mnt
+mkdir /mnt/{boot,home}
+mount /dev/ref1 /mnt/boot
+\end{verbatim}
+
+\chapter{Base de l'installation}
+Une chose à savoir sur l'installation de Archlinux c'est que l'on a besoin
+d'Internet pour l'installer.\\
+Ainsi si vous êtes branch\'e par cable Ethernet pas de soucis mais sinon vous
+devez faire une \'etape préalablement.
+\section{connection au wifi}
+vous devez d'abord utilisez cette commande afin de connaitre votre cart
+réseaux et verifier qu'elle est reconnu:
+\begin{verbatim}
+iwconfig
+\end{verbatim}
+\begin{figure}[h]
+  \includegraphics[width=13cm]{images/iwconfig}
+\end{figure}
+puis taper:
+\begin{verbatim}
+wifi-menu -o # votre carte reseaux ou
+wifi-menu
+\end{verbatim}
+\begin{figure}[h]
+  \includegraphics[width=13cm]{images/wifi-menu}
+\end{figure}
+\chapter{telechargement des package de base}
+Nous allons commencer par telecharger sur /mnt soit / les package de base et de
+base pour developper 
+\begin{verbatim}
+pacstrap /mnt base base-devel
+\end{verbatim}
+\begin{figure}[h]
+  \includegraphics[width=13cm]{images/pacstrapbase}
+\end{figure}
+\section{package internet}
+ensuite vous aurez besoin de vous connecter à internet il est donc obligatoire
+d'installer ce packet
+\begin{verbatim}
+pactrap /mnt networkmanager
+\end{verbatim}
+\section{packet optionnel}
+Si vous souhaiter un éditeur de texte puissant deux vous seront surement propos
+et puissant choisissant un des deux Vim ou Emacs\@:
+\begin{verbatim}
+pacstrap /mnt vim
+pacstrap /mnt emacs
+\end{verbatim}
+Ensuite vous pouvez installer \textbf{alsamixer} pour pouvoir gerez le son de
+votre machine\@:
+\begin{verbatim}
+pacstrap /mnt alsa-utils
+\end{verbatim}
+Il existe aussi un outil pour manipuler les log de votre machine\@:
+\begin{verbatim}
+pacstrap /mnt syslog-ng
+\end{verbatim}
+Pour vous déplacer plus facilement dans vos dossier vous pouvez utiliser
+\textbf{mc}
+\begin{verbatim}
+pactrap /mnt mc
+\end{verbatim}
+Pour avoir l'heure regler vous devrez avoir \textbf{ntpd} d'installer\@:
+\begin{verbatim}
+pacstrap /mnt ntpd
+\end{verbatim}
+Enfin pour pour zipper et dezipper vous pouvez utiliser\@:
+\begin{verbatim}
+pacstrap /mnt zip unzip p7zip
+\end{verbatim}
+Et enfin si vous êtes en dualboot avec windows vous pourrez manipuler tout vos
+dossier et fichier avec\@:
+\begin{verbatim}
+pacstrap /mnt mtools dosfstools ntfs-3g
+\end{verbatim}
+\section{Fstab}
+On peut maintenant generer le fichier fstab qui contient les information sur
+l'architecture de votre archlinux
+\begin{verbatim}
+genfstab -Up /mnt >> /mnt/etc/fstab
+\end{verbatim}
+\begin{figure}[h]
+  \includegraphics[width=13cm]{images/fstab}
+\end{figure}
+Vous pourrez le modifiez plus tard pour par exemple monter une partition
+Windows au démarrage\@:
+\begin{verbatim}
+UUID=UUID filesystem mountpoint ntfs-3g user,rw,relatime,data=ordered 0 2
+\end{verbatim}
+\chapter{Bootloader}
+\section{Installation en Monoboot}
+
+
+\section{Installation pour dualboot}
+Nous allons ici utiliser Grub un des systeme pour gerer deux OS\@:
+\begin{verbatim}
+pacstrap /mnt grub os-prober efibootmgr # efibootmgr est surtout pour les 
+# uefi
+\end{verbatim}
+Nous allons maintenant booter sur notre Archlinux\@:
+\begin{verbatim}
+arch-chroot /mnt
+\end{verbatim}
+Et finir l'installation de GRUB
+\begin{verbatim}
+mkinitcpio -p linux
+grub-mkconfig -o /boot/grub/grub.cfg
+grub-install --no-floppy --recheck /dev/ref
+\end{verbatim}
+\section{PXE}
+\chapter{Configuration de la langue}
+Pour avoir le clavier dans la bonne langue il faut se referer \ldots
+pour le clavier francais if faut ecrire dans \textbf{/etc/vconsole.conf}
+\begin{verbatim}
+KEYMAP=fr-latin9
+FONT=lat9w-16
+\end{verbatim}
+Pour la localite francaise\@:
+\begin{verbatim}
+# Dans /etc/locale.conf
+LANG=fr_FR.UTF-8
+LC_COLLATE=C
+# enlever le # de fr_FR.UTF8 UTF8 dans /etc/locale.gen
+locale-gen
+\end{verbatim}
+Enfin pour avoir avoir le fuseau horaire il vous faut cree ce lien\@:
+\begin{verbatim}
+ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+hwclock --systoch --utc #seulement si vous etes en monoboot
+\end{verbatim}
+\chapter{Activation des système au démarrage}
+Activation de la connection au reseaux automatiquement\@:
+\begin{verbatim}
+systemctl enable NetworkManager
+\end{verbatim}
+Activation de la synchronisation des de l'horloge\@:
+\begin{verbatim}
+systemctl enable ntpd
+\end{verbatim}
+Activation du  generateur de log
+\begin{verbatim}
+systemctl enable syslog-ng
+\end{verbatim}
+et d'autres precedement explique\@:
+\begin{verbatim}
+systemctl enable cronie
+systemctl enable avahi-daemon
+systemctl enable avahi-dnsconfd
+systemctl enable bluetooth # que pour les appareil bluetooth
+\end{verbatim}
+\chapter{personalisation de votre machine}
+Pour lui donner un nom editer \textbf{/etc/hostname}
+\begin{verbatim}
+Le_nom_de_votre_machine
+\end{verbatim}
+Il est aussi conseiller de mettre un mot de passe pour le super user ``root''
+avec cette commande\@:
+\begin{verbatim}
+passwd root
+Enter new UNIX password:
+Retype new Unix password:
+passwd: password updated successfully
+\end{verbatim}
+Enfin a fin d'avoir YAOURT\footnote{Yaourt est un programme en ligne de 
+  commande qui interface les fonctions de pacman et makepkg pour la gestion 
+des paquets sous Arch Linux.} nous allons ajouter au fichier
+\textbf{/etc/pacman.conf}
+\begin{verbatim}
+[archlinuxfr]
+SigLevel = Optional TrustAll
+Server = http://repo.archlinux.fr/$arch
+\end{verbatim}
+et si vous voulez installer des logiciel uniquement disponible en 32 bits enlever les \#
+dans ce même fichier\@:
+\begin{verbatim}
+#[multilib]
+#Include = /etc/pacman.d/mirrorlist
+\end{verbatim}
+Si vous voulez encore plus de personalisation vous pouvez ajouter\@:
+\begin{verbatim}
+ILoveCandy
+\end{verbatim}
+pour avoir une barre de chargement en forme de pacman ou encore\@:
+\begin{verbatim}
+Color
+\end{verbatim}
+pour avoir pacman en couleur.\\
+Ensuite pour installer le fameux yaourt synchronise puis installer avec les
+commande suivante\@:
+\begin{verbatim}
+pacman -Syu
+pacman -S yaourt
+\end{verbatim}
+Enfin vous pouver quitter votre session, demonter votre archlinux et relancer
+votre machine\@:
+\begin{verbatim}
+exit
+umount -R /mnt
+reboot
+\end{verbatim}
+Si tout c'est bien passer vous allez demarrer votre Archlinux.
+Commencer par synchroniser et rafraichir les packets de pacman\@:
+\begin{verbatim}
+pacman -Syy
+\end{verbatim}
+Et maintenant vous pouvez installer yaourt
+Maintenant vous serais surement heureux d'apprendre a cree un utilisateur.
+Je vais commence par vous presenter une utilisation courante de useradd\@:
+\begin{verbatim}
+  useradd -m -g users -G wheel -c 'comment' -s /bin/bash name -p password
+\end{verbatim}
+Décortiquons ce charabia à present\@:
+\begin{enumerate}
+  \item -m creation du repertoire home
+  \item -g groupe principal
+  \item -G groupe supplementaire \'wheel\' utile pour utiliser sudo
+  \item -c le comentaire \' nom principal de l'utilisateur
+  \item -s le shell utilise.
+  \item -p initialisation du mot de passe
+\end{enumerate}
+Comme je vous explique plus haut nous allons configurer sudo\footnote{est un
+programme conçu pour permettre à un administrateur système de déléguer des
+privilèges à des utilisateurs, et ainsi leur permettre de lancer certaines
+(ou toutes) commandes en tant que root ou autre utilisateur tout en
+enregistrant l'utilisation de ces privilèges.}
+pour cela vous aller taper la commande \textbf{visudo}
+et décommenter la ligne suivante\@:
+\begin{verbatim}
+  %wheel ALL=(ALL) ALL
+\end{verbatim}
+\part{Archlinux en graphique}
+\chapter{Xorg}
+Afin de pouvoir interagir graphiquement avec votre machine vous devrez
+utiliser Xorg
+\section{Definition}
+\section{Les g\'enereaux}
+Pour commencer il y a les obligatoire\@:
+\begin{verbatim}
+  pacman -S xorg-server xorg-xinit xorg-xmessage xorg-utils xorg-server-utils
+  xorg-apps
+\end{verbatim}
+ensuit pour la souris et le clavier ils sont installable de cette façon\@:
+\begin{verbatim}
+  pacman -S xf86-input-mouse xf86-input-keyboard
+\end{verbatim}
+\section{bonus}
+Et pour ce qui on un clavier tactile ils sera necessaire d'installer\@:
+\begin{verbatim}
+  pacman -S xf86-input-synaptics
+\end{verbatim}
+\section{pilote video}
+Pour les pilote video vous aurez besoin de vous referez au lien suivant\@:
+\url{https://wiki.archlinux.fr/Xorg#Pilotes_libres}
+\chapter{Login Manager}
+\section{Console}
+\section{graphical}
+\subsection{GDM}
+GDM est un des loggings manager les plus connu facile à installer et pratique
+il comblera vos attente.
+Ensuite pour le démarrer il suffira d'utiliser cette commande\@:
+\begin{verbatim}
+  systemctl start gdm.service
+\end{verbatim}
+
+
+%\backmatter
+\end{document}
