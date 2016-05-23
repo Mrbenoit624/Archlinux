@@ -138,7 +138,7 @@
     mount /dev/ref4 /mnt/home
   \end{codebox}
   \\
-  \section{Cotée feignant}
+  \section{Coté feignant}
   Il n'est pas nécessaire de crée la partition swap et / et /home peuvent
   cohabiter bien qu'il est conseiller de les garder. Elle vous permettra en outre
   de posséder plusieurs Linux avec le meme home d'ailleurs si vous posséder
@@ -353,7 +353,7 @@
     --bootloader-id=arch\_grub --recheck
   \end{codebox}
   \\
-  \section{PXE}
+  %\section{PXE}
   \chapter{Configuration de la langue}
   Pour avoir le clavier dans la bonne langue il faut se referer \ldots
   pour le clavier francais if faut ecrire dans \textbf{/etc/vconsole.conf}
@@ -530,7 +530,7 @@
   Pour les pilote video vous aurez besoin de vous referez au lien suivant\@:
   \url{https://wiki.archlinux.fr/Xorg#Pilotes_libres}
   \chapter{Login Manager}
-  \section{Console}
+  %\section{Console}
   \section{graphical}
   \subsection{GDM}
   GDM est un des loggings manager les plus connu facile à installer et pratique
@@ -541,9 +541,20 @@
   \end{codebox}
   \\
   \chapter{Interface Graphique}
+  Maintenant que votre login manager est install rien de plus simple pour
+  installer votre interface graphique.
   \section{Gnome}
+   GNOME (prononciation gah-nohm ou nohm) est un environement graphique qui a
+   pour but d'etre simple d'utilisation. GNOME fait parti du GNU Project.
+  \begin{codebox}
+    pacman -S gnome gnome-extra
+  \end{codebox}
   \section{I3}
-
+  i3 est un ``dynamic tiling window manager'' inspir de wmii il est beaucoup
+  plus compliqu\'e a utilis\'e que GNOME.\\
+  I3 poss\'e une très bonne documentation.% multi-monitor support, a tree structure for windows, and different modes like in vim.
+  %\chapter{Utilitaire}
+  %\section{nmap}
 
 %\backmatter
   \end{document}
