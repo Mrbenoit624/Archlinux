@@ -10,21 +10,44 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{yellow},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=bash,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+
 \geometry{top=3cm, bottom=1cm, left=3cm , right=3cm}
-\newsavebox{\mybox}
-\newenvironment{codebox}{
-  \itshape
-  \small
-  \\
-  \begin{lrbox}{
-      \mybox
-    }
-    \begin{minipage}{1\textwidth}}{
-      \end{minipage}
-    \end{lrbox}
-    \fcolorbox{black}{lightgray}{\usebox{\mybox}}
-    \\
-  }
   \begin{document}
 %\frontmatter
 %Je remercie le site \url{archlinux.org} qui m'a bien aid\'e
@@ -52,9 +75,9 @@
   \end{itemize}
   enfin si vous avez un Linux sous la main vous pouvez graver votre cle ou
   votre cd en ligne de commande très simplement avec cette commande\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     dd if= *.iso of=usb bs=520
-  \end{codebox}
+  \end{lstlisting}
   \section{Demarrage de votre Archlinux live}
   Maintenant il ne vous reste plus qu'a redmarrer votre machine puis appuyer
   sur \'echap le plus rapidement possible.Vous voila alors dans votre
@@ -77,13 +100,13 @@
   Premier souci à survenir votre clavier est en QWERTY si vous voulez changer
   cela taper seulement la commande suivante qui va vous permettre de charger le
   clavier AZERTY:\\
-  \begin{codebox}
+  \begin{lstlisting}
     loadkeys fr
-  \end{codebox}\\
+  \end{lstlisting}
   Maintenant pour partitionner votre disque dur taper la commande:\\
-  \begin{codebox}
+  \begin{lstlisting}
     cfdisk ref
-  \end{codebox}\\
+  \end{lstlisting}
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/cfdisk}
   \end{figure}
@@ -110,34 +133,31 @@
   \section{Formatage des partitions}
   \subsection{Formatage en BIOS}
   Pour formater les partitions, il suffit d'entrer les commandes suivantes:\\
-  \begin{codebox}
-    mkfs.ext2 /dev/ref1\\
-    mkfs.ext4 /dev/ref3\\
-    mkfs.ext4 /dev/ref4\\
-    mkswap /dev/ref2\\
+  \begin{lstlisting}
+    mkfs.ext2 /dev/ref1
+    mkfs.ext4 /dev/ref3
+    mkfs.ext4 /dev/ref4
+    mkswap /dev/ref2
     swapon /dev/ref2
-  \end{codebox}
-  \\
+  \end{lstlisting}
   \subsection{Formatage en UEFI}
   Pour formater les partitions, il suffit d'entrer les commandes suivantes:\\
-  \begin{codebox}
-    mkfs.fat -F32 /dev/ref1\\
-    mkfs.ext4 /dev/ref3\\
-    mkfs.ext4 /dev/ref4\\
-    mkswap /dev/ref2\\
+  \begin{lstlisting}
+    mkfs.fat -F32 /dev/ref1
+    mkfs.ext4 /dev/ref3
+    mkfs.ext4 /dev/ref4
+    mkswap /dev/ref2
     swapon /dev/ref2
-  \end{codebox}
-  \\
+  \end{lstlisting}
   \section{Montage des partitions}
   Puis il ne reste plus qu'a monter les 4 partitions ainsi que crée le dossier
   home et et boot.\\
-  \begin{codebox}
-    mount /dev/ref3 /mnt\\
-    mkdir /mnt/\{boot,home\}\\
-    mount /dev/ref1 /mnt/boot\\
+  \begin{lstlisting}
+    mount /dev/ref3 /mnt
+    mkdir /mnt/{boot,home}
+    mount /dev/ref1 /mnt/boot
     mount /dev/ref4 /mnt/home
-  \end{codebox}
-  \\
+  \end{lstlisting}
   \section{Coté feignant}
   Il n'est pas nécessaire de crée la partition swap et / et /home peuvent
   cohabiter bien qu'il est conseiller de les garder. Elle vous permettra en outre
@@ -153,20 +173,18 @@
   \end{tabular*}
   \newline
   Pour formater les partitions, il suffit d'entrer les commandes suivantes:\\
-  \begin{codebox}
-    mkfs.ext2 /dev/ref1\# ou\\
-    mkfs.fat -F32 /dev/ref1 \\
+  \begin{lstlisting}
+    mkfs.ext2 /dev/ref1 # ou
+    mkfs.fat -F32 /dev/ref1 
     mkfs.ext4 /dev/ref2
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Puis il ne reste plus qu'a monter les 4 partitions ainsi que crée le dossier
   home et et boot.\\
-  \begin{codebox}
-    mount /dev/ref2 /mnt\\
-    mkdir /mnt/{boot,home}\\
+  \begin{lstlisting}
+    mount /dev/ref2 /mnt
+    mkdir /mnt/{boot,home}
     mount /dev/ref1 /mnt/boot
-  \end{codebox}
-  \\
+  \end{lstlisting}
 
   \chapter{Base de l'installation}
   Une chose à savoir sur l'installation de Archlinux c'est que l'on a besoin
@@ -176,110 +194,103 @@
   \section{connection au wifi}
   vous devez d'abord utilisez cette commande afin de connaitre votre cart
   réseaux et verifier qu'elle est reconnu:\\
-  \begin{codebox}
+  \begin{lstlisting}
     iwconfig
-  \end{codebox}
-  \\
+  \end{lstlisting}
+
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/iwconfig}
   \end{figure}
   puis taper:\\
-  \begin{codebox}
-    wifi-menu -o  \#votre carte reseaux ou
+  \begin{lstlisting}
+    wifi-menu -o  #votre carte reseaux ou
     wifi-menu
-  \end{codebox}
-  \\
+  \end{lstlisting}
+  
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/wifi-menu}
   \end{figure}
   \chapter{telechargement des package de base}
   Nous allons commencer par telecharger sur /mnt soit / les package de base et de
   base pour developper\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt base base-devel
-  \end{codebox}
-  \\
+  \end{lstlisting}
+  
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/pacstrapbase}
   \end{figure}
   \section{package internet}
   ensuite vous aurez besoin de vous connecter à internet il est donc obligatoire
   d'installer ce packet\\
-  \begin{codebox}
+  \begin{lstlisting}
     pactrap /mnt networkmanager
-  \end{codebox}
-  \\
+  \end{lstlisting}
+  
   \pagebreak
   \section{packet optionnel}
   Si vous souhaiter un éditeur de texte les deux principaux et
   puissant qui vous seront presenter seront Vim ou Emacs\@:\\
-  \begin{codebox}
-    pacstrap /mnt vim\\
+  \begin{lstlisting}
+    pacstrap /mnt vim
     pacstrap /mnt emacs
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Ensuite vous pouvez installer \textbf{alsamixer} pour pouvoir gerez le son de
   votre machine\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt alsa-utils
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Ensuite pour vous en servir il suffit d'executer\@:
-  \begin{codebox}
+  \begin{lstlisting}
     alsamixer
-  \end{codebox}
+  \end{lstlisting}
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/Alsamixer}
   \end{figure}
 
   Il existe aussi un outil pour manipuler les log de votre machine\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt syslog-ng
-  \end{codebox}
+  \end{lstlisting}
   Pour avoir l'heure regler vous devrez avoir \textbf{ntpd} d'installer\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt ntpd
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Enfin pour pour zipper et dezipper vous pouvez utiliser\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt zip unzip p7zip
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Et enfin si vous êtes en dualboot avec windows vous pourrez manipuler tout vos
   dossier et fichier avec\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt mtools dosfstools ntfs-3g
-  \end{codebox}
-
-  \pagebreak
-  
+  \end{lstlisting}
   Pour vous déplacer plus facilement dans vos dossier vous pouvez utiliser
   \textbf{mc}\\
-  \begin{codebox}
+  \begin{lstlisting}
     pactrap /mnt mc
-  \end{codebox}
-  \\
+  \end{lstlisting}
+  
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/mc}
   \end{figure}
-  \\
+  
   \section{Fstab}
   On peut maintenant generer le fichier fstab qui contient les information sur
   l'architecture de votre archlinux\\
-  \begin{codebox}
+  \begin{lstlisting}
     genfstab -Up /mnt >> /mnt/etc/fstab
-  \end{codebox}
-  \\
+  \end{lstlisting}
+  
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/fstab}
   \end{figure}
   Vous pourrez le modifiez plus tard pour par exemple monter une partition
   Windows au démarrage\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     UUID=UUID filesystem mountpoint ntfs-3g user, rw, relatime, data=ordered 0 2
-  \end{codebox}
-  \\
+  \end{lstlisting}
+  
   \chapter{Bootloader}
   \section{Installation en Monoboot}
   Nous allons ici utiliser syslinux un outil puissant et repide pour booter sur
@@ -288,190 +299,163 @@
     \includegraphics[width=\textwidth]{images/syslinux}
   \end{figure}
   Ainsi pour commecer on va l'installer grace à cette commande\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacstrap /mnt syslinux
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Ensuite vous pouvez faire une installation automatique de Linux mais avant cela
   vous aurez besoin de savoir si vos partitions sont en gpt ou mbr\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     parted -l /dev/ref
-  \end{codebox}
-  \\
-  Pour les UEFI vous devrez\@:\\
-  \begin{codebox}
+  \end{lstlisting}
+  Pour les UEFI vous devrez:
+  \begin{lstlisting}
     pacstrap /mnt syslinux dosfstools efibootmgr
-  \end{codebox}
-  \\
-  \newline
+  \end{lstlisting}
   Pour les autres\@:
   Ensuite en fonction vous lancerez l'installation avec\@:\\
-  \begin{codebox}
-    \# Pour les GPT\\
-    pacstrap /mnt gptfdisk\\
-    arch-chroot /mnt\\
-    syslinux-install\_update -ia\\
-    \newline
-    \# Pour les MBR\\
-    arch-chroot /mnt\\
-    syslinux-install\_update -iam
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    # Pour les GPT
+    pacstrap /mnt gptfdisk
+    arch-chroot /mnt
+    syslinux-install_update -ia
+    
+    # Pour les MBR
+    arch-chroot /mnt
+    syslinux-install_update -iam
+  \end{lstlisting}
   Et voila c'est fini, mais si vous voulez le personalis\'e referrer vous à\\
   \url{https://wiki.archlinux.org/index.php/Syslinux}
-  \pagebreak
   \section{Installation pour dualboot}
   Nous allons ici utiliser Grub un des systeme pour gerer deux OS\@:\\
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/grub}
   \end{figure}
   Commençons par installer les packet necessaire\@:\\
-  \begin{codebox}
-    pacstrap /mnt grub os-prober efibootmgr  \#efibootmgr est surtout pour les 
+  \begin{lstlisting}
+    pacstrap /mnt grub os-prober efibootmgr  #efibootmgr est surtout pour les 
     uefi
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Nous allons maintenant booter sur notre Archlinux\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     arch-chroot /mnt
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Et finir l'installation de GRUB\\
-  \begin{codebox}
-    mkinitcpio -p linux\\
+  \begin{lstlisting}
+    mkinitcpio -p linux
     grub-mkconfig -o /boot/grub/grub.cfg
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Pour une installation en BIOS\@:\\
-  \begin{codebox}
-    grub-install --no-floppy --recheck /dev/ref\\
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    grub-install --no-floppy --recheck /dev/ref
+  \end{lstlisting}
   Pour une installation UEFI\@:\\
-  \begin{codebox}
-    grub-install --target=x86\_64-efi --efi-directory=/boot/efi
+  \begin{lstlisting}
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi
     --bootloader-id=arch\_grub --recheck
-  \end{codebox}
-  \\
+  \end{lstlisting}
   %\section{PXE}
   \chapter{Configuration de la langue}
   Pour avoir le clavier dans la bonne langue il faut se referer \ldots
   pour le clavier francais if faut ecrire dans \textbf{/etc/vconsole.conf}
   \\
-  \begin{codebox}
-    KEYMAP=fr-latin9\\
+  \begin{lstlisting}
+    KEYMAP=fr-latin9
     FONT=lat9w-16
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Pour la localite francaise\@:\\
-  \begin{codebox}
-    Dans /etc/locale.conf\\
-    LANG=fr\_FR.UTF-8\\
-    LC\_COLLATE=C\\
-    decommenter fr\_FR.UTF8 UTF8 dans /etc/locale.gen
+  \begin{lstlisting}
+    Dans /etc/locale.conf
+    LANG=fr_FR.UTF-8
+    LC_COLLATE=C
+    decommenter fr_FR.UTF8 UTF8 dans /etc/locale.gen
     locale-gen
-  \end{codebox}\\
+  \end{lstlisting}
   Enfin pour avoir avoir le fuseau horaire il vous faut cree ce lien\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
-    hwclock --systoch --utc \#seulement si vous etes en monoboot
-  \end{codebox}
-  \\
+    hwclock --systoch --utc # seulement si vous etes en monoboot
+  \end{lstlisting}
   \chapter{Activation des système au démarrage}
   Activation de la connection au reseaux automatiquement\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     systemctl enable NetworkManager
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Activation de la synchronisation des de l'horloge\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     systemctl enable ntpd
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Activation du  generateur de log\\
-  \begin{codebox}
+  \begin{lstlisting}
     systemctl enable syslog-ng
-  \end{codebox}
-  \\
+  \end{lstlisting}
   et d'autres precedement explique\@:\\
-  \begin{codebox}
-    systemctl enable cronie\\
-    systemctl enable avahi-daemon\\
-    systemctl enable avahi-dnsconfd\\
-    systemctl enable bluetooth \#que pour les appareil bluetooth
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    systemctl enable cronie
+    systemctl enable avahi-daemon
+    systemctl enable avahi-dnsconfd
+    systemctl enable bluetooth #que pour les appareil bluetooth
+  \end{lstlisting}
   \chapter{personalisation de votre machine}
   Pour lui donner un nom editer \textbf{/etc/hostname}\\
-  \begin{codebox}
-    Le\_nom\_de\_votre\_machine
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    Le_nom_de_votre_machine
+  \end{lstlisting}
   Il est aussi conseiller de mettre un mot de passe pour le super user ``root''
   avec cette commande\@:\\
-  \begin{codebox}
-    passwd root\\
-    Enter new UNIX password:\\
-    Retype new Unix password:\\
+  \begin{lstlisting}
+    passwd root
+    Enter new UNIX password:
+    Retype new Unix password:
     passwd: password updated successfully
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Enfin a fin d'avoir YAOURT\footnote{Yaourt est un programme en ligne de 
     commande qui interface les fonctions de pacman et makepkg pour la gestion 
   des paquets sous Arch Linux.} nous allons ajouter au fichier
   \textbf{/etc/pacman.conf}\\
-  \begin{codebox}
-    [archlinuxfr]\\
-    SigLevel = Optional TrustAll\\
-    Server = http://repo.archlinux.fr/\$arch
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    [archlinuxfr]
+    SigLevel = Optional TrustAll
+    Server = http://repo.archlinux.fr/$arch
+  \end{lstlisting}
   et si vous voulez installer des logiciel uniquement disponible en 32 bits enlever les \#
   dans ce même fichier\@:\\
-  \begin{codebox}
-    \#[multilib]\\
-    \#Include = /etc/pacman.d/mirrorlist
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    #[multilib]
+    #Include = /etc/pacman.d/mirrorlist
+  \end{lstlisting}
   Si vous voulez encore plus de personalisation vous pouvez ajouter\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     ILoveCandy
-  \end{codebox}
-  \\
+  \end{lstlisting}
   pour avoir une barre de chargement en forme de pacman ou encore\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     Color
-  \end{codebox}
-  \\
+  \end{lstlisting}
   pour avoir pacman en couleur.\\
   Ensuite pour installer le fameux yaourt synchronise puis installer avec les
   commande suivante\@:\\
-  \begin{codebox}
-    pacman -Syu\\
+  \begin{lstlisting}
+    pacman -Syu
     pacman -S yaourt
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Enfin vous pouver quitter votre session, demonter votre archlinux et relancer
   votre machine\@:\\
-  \begin{codebox}
-    exit\\
-    umount -R /mnt\\
+  \begin{lstlisting}
+    exit
+    umount -R /mnt
     reboot
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Si tout c'est bien passer vous allez demarrer votre Archlinux.
   Commencer par synchroniser et rafraichir les packets de pacman\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacman -Syy
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Et maintenant vous pouvez installer yaourt
   Maintenant vous serais surement heureux d'apprendre a cree un utilisateur.
   Je vais commence par vous presenter une utilisation courante de useradd\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     useradd -m -g users -G wheel -c 'comment' -s /bin/bash name -p password
-  \end{codebox}
-  \\
+  \end{lstlisting}
   Décortiquons ce charabia à present\@:
   \begin{enumerate}
     \item -m creation du repertoire home
@@ -488,10 +472,9 @@
   enregistrant l'utilisation de ces privilèges.}
   pour cela vous aller taper la commande \textbf{visudo}
   et décommenter la ligne suivante\@:\\
-  \begin{codebox}
-    \#wheel ALL=(ALL) ALL
-  \end{codebox}
-  \\
+  \begin{lstlisting}
+    #wheel ALL=(ALL) ALL
+  \end{lstlisting}
   \part{Archlinux en graphique}
   \chapter{Xorg}
   Afin de pouvoir interagir graphiquement avec votre machine vous devrez
@@ -510,22 +493,19 @@
   (GDM, KDM, Slim, etc)
   \section{Les g\'enereaux}
   Pour commencer il y a les obligatoire\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacman -S xorg-server xorg-xinit xorg-xmessage xorg-utils xorg-server-utils
     xorg-apps
-  \end{codebox}
-  \\
-  ensuit pour la souris et le clavier ils sont installable de cette façon\@:\\
-  \begin{codebox}
+  \end{lstlisting}
+  ensuite pour la souris et le clavier ils sont installable de cette façon\@:\\
+  \begin{lstlisting}
     pacman -S xf86-input-mouse xf86-input-keyboard
-  \end{codebox}
-  \\
+  \end{lstlisting}
   \section{bonus}
   Et pour ce qui on un clavier tactile ils sera necessaire d'installer\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     pacman -S xf86-input-synaptics
-  \end{codebox}
-  \\
+  \end{lstlisting}
   \section{pilote video}
   Pour les pilote video vous aurez besoin de vous referez au lien suivant\@:
   \url{https://wiki.archlinux.fr/Xorg#Pilotes_libres}
@@ -536,19 +516,18 @@
   GDM est un des loggings manager les plus connu facile à installer et pratique
   il comblera vos attente.
   Ensuite pour le démarrer il suffira d'utiliser cette commande\@:\\
-  \begin{codebox}
+  \begin{lstlisting}
     systemctl start gdm.service
-  \end{codebox}
-  \\
+  \end{lstlisting}
   \chapter{Interface Graphique}
   Maintenant que votre login manager est install rien de plus simple pour
   installer votre interface graphique.
   \section{Gnome}
    GNOME (prononciation gah-nohm ou nohm) est un environement graphique qui a
    pour but d'etre simple d'utilisation. GNOME fait parti du GNU Project.
-  \begin{codebox}
+  \begin{lstlisting}
     pacman -S gnome gnome-extra
-  \end{codebox}
+  \end{lstlisting}
   \section{I3}
   i3 est un ``dynamic tiling window manager'' inspir de wmii il est beaucoup
   plus compliqu\'e a utilis\'e que GNOME.\\
