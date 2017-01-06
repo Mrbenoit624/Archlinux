@@ -1,0 +1,42 @@
+================================================================================
+                                     README
+================================================================================
+
+
+
+================================= GENERAL INFO =================================
+
+
+  Project: Archlinux installation guide
+  Contributors: Benoit Forgette
+  License: GNU General Public License v3.0
+  Version: v1.01
+  Date: 01-06-17
+
+
+  Epita 2019 - ING 1
+
+
+===================================== GOAL =====================================
+
+
+  A little book to explain how to install Archlinux and understand what you are
+  doing.
+
+
+===================================== USAGE ====================================
+
+
+  To generate the book:
+    make
+
+
+=================================== CHANGELOG ==================================
+
+
+  == V1.01 ==
+    - Correct a mistake about format in UEFI mkfs.vfat instead of mkfs.fat
+    - Add a real README
+    - Add a Makefile to generate the document
+
+

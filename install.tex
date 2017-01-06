@@ -144,7 +144,7 @@ swapon /dev/ref2
 \subsection{Formatage en UEFI}
 Pour formater les partitions, il suffit d'entrer les commandes suivantes:\\
 \begin{lstlisting}
-mkfs.fat -F32 /dev/ref1
+mkfs.vfat -F32 /dev/ref1
 mkfs.ext4 /dev/ref3
 mkfs.ext4 /dev/ref4
 mkswap /dev/ref2
@@ -176,7 +176,7 @@ Revenons au cas ou vous voulez moins partitionner vous obtiendriez alors\@:\\
 Pour formater les partitions, il suffit d'entrer les commandes suivantes:\\
 \begin{lstlisting}
 mkfs.ext2 /dev/ref1 # ou pour les systeme UEFI
-mkfs.fat -F32 /dev/ref1 
+mkfs.vfat -F32 /dev/ref1 
 mkfs.ext4 /dev/ref2
 \end{lstlisting}
 Puis il ne reste plus qu'a monter les 4 partitions ainsi que crée le dossier
