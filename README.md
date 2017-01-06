@@ -1,2 +1,0 @@
-# Archlinux
-installation of Archlinux
